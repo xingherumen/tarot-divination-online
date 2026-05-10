@@ -32,7 +32,8 @@ const spreads = {
   ]
 };
 
-const historyKey = "tarot_divination_history";
+const reversedProbability = 0.5;
+const historyKey = "tarotDivinationHistory";
 
 const questionInput = document.getElementById("questionInput");
 const spreadSelect = document.getElementById("spreadSelect");
@@ -151,7 +152,7 @@ function drawCards() {
   const drawn = shuffle(tarotCards).slice(0, spread.length).map((card, index) => ({
     card,
     position: spread[index].label,
-    reversed: Math.random() < 0.5
+    reversed: Math.random() < reversedProbability
   }));
 
   resultCards.textContent = "";
