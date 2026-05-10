@@ -71,7 +71,7 @@ function createCardView(positionLabel, card, reversed) {
 }
 
 function buildAnalysis(drawn) {
-  const orientation = drawn.reduce((acc, item) => {
+  const orientationCounts = drawn.reduce((acc, item) => {
     if (item.reversed) acc.reversed += 1;
     else acc.upright += 1;
     return acc;
@@ -83,8 +83,9 @@ function buildAnalysis(drawn) {
     return acc;
   }, {});
 
-  const dominantElement = Object.entries(elementCounter).sort((a, b) => b[1] - a[1])[0]?.[0] || "平衡";
-  const orientationSummary = orientation.reversed > orientation.upright
+  const sortedElements = Object.entries(elementCounter).sort((a, b) => b[1] - a[1]);
+  const dominantElement = sortedElements[0]?.[0] || "平衡";
+  const orientationSummary = orientationCounts.reversed > orientationCounts.upright
     ? "逆位偏多，提示先处理内在阻力，再推进外在行动。"
     : "正位偏多，当前整体趋势较顺，可稳步推进。";
 
