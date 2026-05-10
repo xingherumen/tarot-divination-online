@@ -34,6 +34,7 @@ const spreads = {
 
 const CARD_REVERSED_PROBABILITY = 0.5;
 const HISTORY_KEY = "tarotDivinationHistory";
+const HISTORY_LIMIT = 30;
 
 const questionInput = document.getElementById("questionInput");
 const spreadSelect = document.getElementById("spreadSelect");
@@ -113,7 +114,7 @@ function getHistory() {
 function saveHistory(entry) {
   const existing = getHistory();
   existing.unshift(entry);
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(existing.slice(0, 30)));
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(existing.slice(0, HISTORY_LIMIT)));
 }
 
 function renderHistory() {
