@@ -1,0 +1,50 @@
+/* ================================================================
+   六芒星牌阵（7张 — 七角星形布局）— CSS Grid
+   5列5行菱形布局，竖直方向容纳3张牌堆叠
+   
+        C1      C2    C3    C4      C5
+   R1:               [1.过去]
+   R2:  [5.环境]                   [3.未来]
+   R3:               [7.结果]
+   R4:  [4.原因]                   [6.对策]
+   R5:               [2.现在]
+   ================================================================ */
+
+/* === 桌面端 (>1024px) === */
+
+.result-layout-star {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto auto auto;
+    max-width: 920px;
+}
+
+.result-layout-star .result-card-slot:nth-child(1) { grid-column: 3; grid-row: 1; }
+.result-layout-star .result-card-slot:nth-child(5) { grid-column: 1; grid-row: 2; }
+.result-layout-star .result-card-slot:nth-child(3) { grid-column: 5; grid-row: 2; }
+.result-layout-star .result-card-slot:nth-child(7) { grid-column: 3; grid-row: 3; }
+.result-layout-star .result-card-slot:nth-child(4) { grid-column: 1; grid-row: 4; }
+.result-layout-star .result-card-slot:nth-child(6) { grid-column: 5; grid-row: 4; }
+.result-layout-star .result-card-slot:nth-child(2) { grid-column: 3; grid-row: 5; }
+
+.result-layout-star .result-card-center .result-card {
+    border-color: #ec4899;
+    box-shadow: 0 6px 24px rgba(236,72,153,0.3);
+}
+
+/* === 平板端 (601px - 1024px) === */
+
+@media (max-width: 1024px) {
+    .result-layout-star {
+        gap: clamp(8px, 1.5vw, 16px);
+        padding: clamp(8px, 2vw, 20px);
+    }
+}
+
+/* === 手机端 (≤600px) === */
+
+@media (max-width: 600px) {
+    .result-layout-star {
+        gap: 6px;
+        padding: 8px;
+    }
+}

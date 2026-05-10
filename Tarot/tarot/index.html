@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystic Tarot | 神秘塔罗</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+       <!-- 动态星空背景 -->
+<div class="starry-bg" id="starryBg">
+</div>
+
+    <div class="home-container">
+        <nav class="home-nav">
+            <div class="nav-brand">
+                <span class="nav-logo">🔮</span>
+                <span class="nav-title">Mystic Tarot</span>
+            </div>
+            <div class="nav-links">
+                <a href="pages/spread.html" class="nav-link">牌阵占卜</a>
+                <a href="pages/history.html" class="nav-link">占卜记录</a>
+            </div>
+        </nav>
+
+        <div class="hero-section">
+            <div class="hero-badge">✦ 灵性指引平台 ✦</div>
+            <h1 class="hero-title">命 运 之 门</h1>
+            <p class="hero-subtitle">星辰揭示命运轨迹，卡牌低语古老奥秘</p>
+            <div class="hero-decorations">
+                <span class="hero-star">✦</span>
+                <span class="hero-star">✧</span>
+                <span class="hero-star">✦</span>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+            <div class="feature-card" data-url="pages/draw.html" role="button" tabindex="0">
+                <div class="card-glow"></div>
+                <div class="card-icon-wrap">
+                    <span class="card-icon">🃏</span>
+                </div>
+                <h2 class="card-title card-title-amber">Pick A Card</h2>
+                <p class="card-desc">从牌堆中亲手选出属于你的那张牌，让塔罗的智慧为你揭示当下的指引</p>
+                <div class="card-footer">
+                    <span class="card-btn card-btn-amber">开始抽牌 →</span>
+                </div>
+            </div>
+
+            <div class="feature-card" data-url="pages/spread.html" role="button" tabindex="0">
+                <div class="card-glow"></div>
+                <div class="card-icon-wrap">
+                    <span class="card-icon">✨</span>
+                </div>
+                <h2 class="card-title card-title-pink">牌阵占卜</h2>
+                <p class="card-desc">选择经典牌阵，多维度深度解读你的命运与困惑</p>
+                <div class="card-footer">
+                    <span class="card-btn card-btn-pink">选择牌阵 →</span>
+                </div>
+            </div>
+
+            <div class="feature-card" data-url="pages/history.html" role="button" tabindex="0">
+                <div class="card-glow"></div>
+                <div class="card-icon-wrap">
+                    <span class="card-icon">📜</span>
+                </div>
+                <h2 class="card-title card-title-purple">你的旅程</h2>
+                <p class="card-desc">回顾过往的抽牌记录与解读，见证内心成长的每一步</p>
+                <div class="card-footer">
+                    <span class="card-btn card-btn-purple">查看记录 →</span>
+                </div>
+            </div>
+        </div>
+
+        <footer class="home-footer">
+            <p>以星为引，以牌为镜 · Mystic Tarot</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    
+    <!-- 动态星空脚本 -->
+    <script>
+    (function() {
+        var bg = document.getElementById('starryBg');
+        if (!bg) return;
+
+        // 生成闪烁的星星
+        function createStars() {
+            var starCount = 180;
+            for (var i = 0; i < starCount; i++) {
+                var star = document.createElement('div');
+                star.className = 'star';
+                
+                var size = Math.random() * 2.5 + 0.5;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                star.style.animationDelay = Math.random() * 6 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+                
+                bg.appendChild(star);
+            }
+        }
+
+        // 生成流星
+        function createShootingStars() {
+            var colors = ['', 'blue', 'red'];
+            for (var i = 0; i < 8; i++) {
+                var star = document.createElement('div');
+                star.className = 'shooting-star ' + colors[i % colors.length];
+                
+                star.style.left = (Math.random() * 60 + 20) + '%';
+                star.style.top = (Math.random() * 40 + 5) + '%';
+                
+                star.style.animationDelay = (Math.random() * 8 + i * 1.5) + 's';
+                star.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's';
+                
+                bg.appendChild(star);
+            }
+        }
+        
+        // 添加星云
+        function addNebula() {
+            var nebula1 = document.createElement('div');
+            nebula1.className = 'nebula nebula-1';
+            bg.appendChild(nebula1);
+            
+            var nebula2 = document.createElement('div');
+            nebula2.className = 'nebula nebula-2';
+            bg.appendChild(nebula2);
+        }
+
+        createStars();
+        createShootingStars();
+        addNebula();
+    })();
+    </script>
+</body>
+</html>

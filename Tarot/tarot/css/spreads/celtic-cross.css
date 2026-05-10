@@ -1,0 +1,80 @@
+/* ================================================================
+   凯尔特十字牌阵（10张）— CSS Grid
+   7列7行：左侧十字(6张) + 右侧权杖柱(4张竖直排列)
+   
+        C1       C2-C3      C4       C5-C6     C7
+   R1:           [5.冠冕]                     [10.结果]
+   R2:           [1+2.中心]                   [9.希望]
+   R3: [4.过去]  [1+2.中心]  [6.未来]         [8.环境]
+   R4:           [3.根源]                     [7.自我]
+   R5:           (空)
+   
+   牌1(现状)与牌2(阻碍)共享中心单元格，牌2用z-index叠于牌1之上
+   ================================================================ */
+
+/* === 桌面端 (>1024px) === */
+
+.result-spread-celtic_cross {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto auto auto;
+    max-width: 1060px;
+}
+
+/* 十字段 */
+.result-spread-celtic_cross .result-card-slot:nth-child(5) { grid-column: 3; grid-row: 1; }       /* 冠冕 */
+.result-spread-celtic_cross .result-card-slot:nth-child(1) { grid-column: 3; grid-row: 2 / 4; }   /* 现状(中心) */
+.result-spread-celtic_cross .result-card-slot:nth-child(2) { grid-column: 3; grid-row: 2 / 4; }   /* 阻碍(叠于现状上) */
+.result-spread-celtic_cross .result-card-slot:nth-child(4) { grid-column: 1; grid-row: 3; }       /* 过去 */
+.result-spread-celtic_cross .result-card-slot:nth-child(6) { grid-column: 5; grid-row: 3; }       /* 未来 */
+.result-spread-celtic_cross .result-card-slot:nth-child(3) { grid-column: 3; grid-row: 4; }       /* 根源 */
+
+/* 权杖柱 */
+.result-spread-celtic_cross .result-card-slot:nth-child(10) { grid-column: 7; grid-row: 1; }      /* 结果 */
+.result-spread-celtic_cross .result-card-slot:nth-child(9)  { grid-column: 7; grid-row: 2; }      /* 希望 */
+.result-spread-celtic_cross .result-card-slot:nth-child(8)  { grid-column: 7; grid-row: 3; }      /* 环境 */
+.result-spread-celtic_cross .result-card-slot:nth-child(7)  { grid-column: 7; grid-row: 4; }      /* 自我 */
+
+/* 牌2叠于牌1之上（传统十字交叉） */
+.result-spread-celtic_cross .result-card-slot:nth-child(2) {
+    z-index: 3;
+    margin-top: 12px;
+    margin-left: 12px;
+}
+
+.result-spread-celtic_cross .result-card-slot:nth-child(2) .result-card {
+    border-color: #ef4444;
+    box-shadow: 0 6px 24px rgba(239,68,68,0.35);
+}
+
+.result-spread-celtic_cross .result-card-slot:nth-child(1) .result-card {
+    border-color: #ec4899;
+    box-shadow: 0 6px 24px rgba(236,72,153,0.3);
+}
+
+/* === 平板端 (601px - 1024px) === */
+
+@media (max-width: 1024px) {
+    .result-spread-celtic_cross {
+        gap: clamp(8px, 1.5vw, 16px);
+        padding: clamp(8px, 2vw, 20px);
+    }
+
+    .result-spread-celtic_cross .result-card-slot:nth-child(2) {
+        margin-top: 8px;
+        margin-left: 8px;
+    }
+}
+
+/* === 手机端 (≤600px) === */
+
+@media (max-width: 600px) {
+    .result-spread-celtic_cross {
+        gap: 6px;
+        padding: 8px;
+    }
+
+    .result-spread-celtic_cross .result-card-slot:nth-child(2) {
+        margin-top: 6px;
+        margin-left: 6px;
+    }
+}

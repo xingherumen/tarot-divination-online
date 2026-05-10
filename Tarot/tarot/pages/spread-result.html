@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Mystic Tarot | 牌阵解读结果</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../css/spreads/three-card.css">
+    <link rel="stylesheet" href="../css/spreads/celtic-cross.css">
+    <link rel="stylesheet" href="../css/spreads/relationship.css">
+    <link rel="stylesheet" href="../css/spreads/hexagram.css">
+    <link rel="stylesheet" href="../css/spreads/two-choices.css">
+    <link rel="stylesheet" href="../css/spreads/zodiac.css">
+</head>
+<body>
+    <div class="page-container result-page-container">
+        <div class="tarot-card tarot-card-result">
+            <div class="back-link">
+                <a href="spread.html">← 返回牌阵选择</a>
+            </div>
+            <h1 class="page-title result-title" id="resultTitle">🔮 牌 阵 解 读</h1>
+            <p class="subtitle" id="resultSubtitle"></p>
+
+            <div class="result-question-badge hidden" id="resultQuestionBadge"></div>
+
+            <div class="result-layout-stage" id="resultLayoutStage">
+            </div>
+
+            <div class="result-actions-top">
+                <button class="btn btn-pink" id="resultRedrawBtn">🔄 重新抽取</button>
+                <button class="btn btn-save" id="resultSaveBtn">💾 保存记录</button>
+            </div>
+
+            <div class="interpretation-container" id="interpretationContainer">
+            </div>
+        </div>
+    </div>
+
+    <div class="card-detail-overlay" id="cardDetailOverlay"></div>
+
+    <script src="../script.js"></script>
+    <script>
+    (function () {
+        'use strict';
+
+        var ResultPage = {
+            result: null,
+
+            init: function () {
+                var raw = sessionStorage.getItem('tarot_spread_result');
+                if (!raw) {
+                    this.showError('未找到抽牌结果，请返回牌阵页面重新抽取。');
+                    return;
+                }
+
+                try {
+                    this.result = JSON.parse(raw);
+                } catch (e) {
+                    this.showError('数据解析失败，请返回牌阵页面重新抽取。');
+                    return;
+                }
+
+                if (!this.result || !this.result.cards || this.result.cards.length === 0) {
+                    this.showError('抽牌结果为空，请返回牌阵页面重新抽取。');
+                    return;
+                }
+
+                if (window.ImagePreloader && window.ImagePreloader.preloadAll) {
+                    window.ImagePreloader.preloadAll();
+                }
+
+                this.render();
+            },
+
+            showError: function (msg) {
+                var stage = document.getElementById('resultLayoutStage');
+                if (stage) {
+                    stage.innerHTML = '<div class="result-error">' +
+                        '<p>⚠️ ' + msg + '</p>' +
+                        '<a href="spread.html" class="btn btn-pink" style="display:inline-block;margin-top:16px;text-decoration:none;">返回牌阵页面</a>' +
+                    '</div>';
+                }
+            },
+
+            render: function () {
+                var r = this.result;
+                document.getElementById('resultTitle').textContent = '🔮 ' + r.spreadName;
+                document.getElementById('resultSubtitle').textContent =
+                    r.question ? '问：「' + r.question + '」' : r.spreadDef.description;
+
+                if (r.question) {
+                    var badge = document.getElementById('resultQuestionBadge');
+                    badge.textContent = '💭 ' + r.question;
+                    badge.classList.remove('hidden');
+                }
+
+                this.renderCardLayout();
+                this.renderInterpretation();
+                this.bindEvents();
+            },
+
+            renderCardLayout: function () {
+                var stage = document.getElementById('resultLayoutStage');
+                var r = this.result;
+                var layoutType = r.spreadDef.layoutType;
+                var cards = r.cards;
+                var positions = r.spreadDef.positions;
+
+                var html = '<div class="result-card-grid result-layout-' + layoutType +
+                    ' result-spread-' + r.spreadId + '">';
+
+                cards.forEach(function (item, i) {
+                    var pos = positions[i];
+                    var card = item.card;
+                    var uri = '';
+                    try {
+                        uri = (window.ImagePreloader && window.ImagePreloader.getUri)
+                            ? window.ImagePreloader.getUri(card) : '';
+                    } catch (e) {
+                        uri = '';
+                    }
+                    var revClass = item.orientation === '逆位' ? ' reversed' : '';
+                    var isCenter = pos && pos.layer === 'outcome';
+
+                    html += '<div class="result-card-slot' + (isCenter ? ' result-card-center' : '') +
+                        '" data-index="' + i + '">' +
+                        '<div class="result-card' + revClass + '" onclick="ResultPage.openDetail(' + i + ')">' +
+                            '<div class="result-card-img">' +
+                                (uri ? '<img src="' + uri + '" alt="' + card.name + '" class="card-face-img" ' +
+                                 'onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<span class=card-placeholder-lg>🔮</span>\'" />' :
+                                 '<span class="card-placeholder-lg">🔮</span>') +
+                            '</div>' +
+                            '<div class="result-card-info">' +
+                                '<span class="result-card-name">' + card.name + '</span>' +
+                                '<span class="result-card-orient ' + (item.orientation === '逆位' ? 'rev' : 'up') + '">' +
+                                    (item.orientation === '逆位' ? '▼' : '▲') + '</span>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="result-position-label">' +
+                            '<span class="result-pos-num">' + (i + 1) + '</span>' +
+                            '<span class="result-pos-name">' + pos.name + '</span>' +
+                        '</div>' +
+                    '</div>';
+                });
+
+                html += '</div>';
+                stage.innerHTML = html;
+            },
+
+            renderInterpretation: function () {
+                var container = document.getElementById('interpretationContainer');
+                var interp = this.result.interpretation;
+                if (!interp) return;
+
+                var html = '<div class="interp-tabs">' +
+                    '<button class="interp-tab active" onclick="ResultPage.switchTab(\'single\')">单牌释义</button>' +
+                    '<button class="interp-tab" onclick="ResultPage.switchTab(\'combo\')">组合分析</button>' +
+                    '<button class="interp-tab" onclick="ResultPage.switchTab(\'overall\')">综合解读</button>' +
+                    '</div>' +
+                    '<div class="interp-panels">' +
+                    '<div class="interp-panel active" id="panel-single">' +
+                        interp.singleCards.map(function (sc) {
+                            return '<div class="interp-card-item">' +
+                                '<div class="interp-card-header">' +
+                                    '<span class="interp-pos">' + sc.position + '</span>' +
+                                    '<span class="interp-card-name">' + sc.cardName + '</span>' +
+                                    '<span class="interp-orientation ' + (sc.orientation === '逆位' ? 'reversed' : 'upright') + '">' +
+                                        sc.orientation + '</span>' +
+                                '</div>' +
+                                '<p class="interp-meaning">' + sc.contextNote + '</p>' +
+                            '</div>';
+                        }).join('') +
+                    '</div>' +
+                    '<div class="interp-panel" id="panel-combo">' +
+                        interp.combinations.map(function (cb) {
+                            return '<div class="interp-combo-item">' +
+                                '<div class="interp-combo-header">' +
+                                    '<span class="interp-combo-pair">' + cb.pair + '</span>' +
+                                    '<span class="interp-combo-type ' + cb.type + '">' +
+                                        (cb.type === 'harmonious' ? '和谐' : cb.type === 'conflicting' ? '冲突' : '中立') +
+                                    '</span>' +
+                                '</div>' +
+                                '<p class="interp-combo-desc">' + cb.analysis + '</p>' +
+                            '</div>';
+                        }).join('') +
+                    '</div>' +
+                    '<div class="interp-panel" id="panel-overall">' +
+                        '<div class="interp-overall-section">' +
+                            '<h4>综合解读</h4>' +
+                            '<p>' + interp.overall + '</p>' +
+                        '</div>' +
+                        '<div class="interp-overall-section">' +
+                            '<h4>行动建议</h4>' +
+                            '<p class="interp-advice">' + interp.themedAdvice + '</p>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+                container.innerHTML = html;
+            },
+
+            switchTab: function (tabName) {
+                var tabs = document.querySelectorAll('.interp-tab');
+                var panels = document.querySelectorAll('.interp-panel');
+                tabs.forEach(function (t) { t.classList.remove('active'); });
+                panels.forEach(function (p) { p.classList.remove('active'); });
+                var activeTab = document.querySelector('.interp-tab[onclick*="' + tabName + '"]');
+                var activePanel = document.getElementById('panel-' + tabName);
+                if (activeTab) activeTab.classList.add('active');
+                if (activePanel) activePanel.classList.add('active');
+            },
+
+            openDetail: function (index) {
+                var r = this.result;
+                if (!r || !r.cards[index]) return;
+                var item = r.cards[index];
+                var pos = r.spreadDef.positions[index];
+                var card = item.card;
+                var meaning = item.orientation === '正位' ? card.meaning : card.reverse;
+                var uri = '';
+                try {
+                    uri = (window.ImagePreloader && window.ImagePreloader.getUri)
+                        ? window.ImagePreloader.getUri(card) : '';
+                } catch (e) {
+                    uri = '';
+                }
+
+                var overlay = document.getElementById('cardDetailOverlay');
+                overlay.innerHTML =
+                    '<div class="card-detail-modal">' +
+                        '<button class="card-detail-close" onclick="document.getElementById(\'cardDetailOverlay\').classList.remove(\'active\')">✕</button>' +
+                        '<div class="card-detail-img">' +
+                            (uri ? '<img src="' + uri + '" alt="' + card.name + '" class="card-face-img" ' +
+                             'onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<span class=card-placeholder>🔮</span>\'" />' :
+                             '<span class="card-placeholder">🔮</span>') +
+                        '</div>' +
+                        '<div class="card-detail-info">' +
+                            '<h3>' + card.name + ' <span class="' + (item.orientation === '逆位' ? 'reversed' : 'upright') + '">' +
+                                item.orientation + '</span></h3>' +
+                            '<p class="card-detail-pos">📍 位置：' + pos.name + ' — ' + pos.description + '</p>' +
+                            '<p class="card-detail-meaning">「' + meaning + '」</p>' +
+                            (card.element ? '<p>🔮 元素：' + card.element + '</p>' : '') +
+                            (card.planet ? '<p>🌟 守护星：' + card.planet + '</p>' : '') +
+                            '<p class="card-detail-advice">📜 指引：' + card.advice + '</p>' +
+                        '</div>' +
+                    '</div>';
+                overlay.classList.add('active');
+            },
+
+            bindEvents: function () {
+                var self = this;
+                var redrawBtn = document.getElementById('resultRedrawBtn');
+                var saveBtn = document.getElementById('resultSaveBtn');
+                var overlay = document.getElementById('cardDetailOverlay');
+
+                if (redrawBtn) {
+                    redrawBtn.onclick = function () {
+                        sessionStorage.removeItem('tarot_spread_result');
+                        window.location.href = 'spread.html';
+                    };
+                }
+
+                if (saveBtn) {
+                    saveBtn.onclick = function () {
+                        self.saveToHistory();
+                    };
+                }
+
+                if (overlay) {
+                    overlay.onclick = function (e) {
+                        if (e.target === overlay) overlay.classList.remove('active');
+                    };
+                }
+            },
+
+            saveToHistory: function () {
+                var r = this.result;
+                var record = {
+                    id: r.id,
+                    date: r.timestamp,
+                    type: 'spread',
+                    spreadId: r.spreadId,
+                    spreadName: r.spreadName,
+                    question: r.question,
+                    cards: r.cards.map(function (item, i) {
+                        var pos = r.spreadDef.positions[i];
+                        return {
+                            position: pos ? pos.name : '',
+                            cardName: item.card.name,
+                            orientation: item.orientation,
+                            meaning: item.orientation === '正位' ? item.card.meaning : item.card.reverse
+                        };
+                    }),
+                    interpretation: r.interpretation
+                };
+
+                try {
+                    var history = [];
+                    var raw = localStorage.getItem('tarot_history');
+                    history = raw ? JSON.parse(raw) : [];
+                    history.unshift(record);
+                    if (history.length > 50) history.length = 50;
+                    localStorage.setItem('tarot_history', JSON.stringify(history));
+                } catch (e) {}
+
+                var saveBtn = document.getElementById('resultSaveBtn');
+                if (saveBtn) {
+                    saveBtn.textContent = '✅ 已保存';
+                    saveBtn.disabled = true;
+                    setTimeout(function () {
+                        saveBtn.textContent = '💾 保存记录';
+                        saveBtn.disabled = false;
+                    }, 2000);
+                }
+            }
+        };
+
+        window.ResultPage = ResultPage;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            ResultPage.init();
+        });
+    })();
+    </script>
+</body>
+</html>
