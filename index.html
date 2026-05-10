@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>星海塔罗 · 在线占卜</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="stars stars-a" aria-hidden="true"></div>
+  <div class="stars stars-b" aria-hidden="true"></div>
+  <main class="container">
+    <header class="hero">
+      <p class="tag">沉浸式星空塔罗</p>
+      <h1>星海塔罗占卜</h1>
+      <p class="subtitle">支持单张抽牌与过去-现在-未来牌阵，提供正逆位解读与基础分析。</p>
+    </header>
+
+    <section class="panel controls" aria-label="抽牌设置">
+      <label>
+        你的问题（可选）
+        <input id="questionInput" type="text" maxlength="80" placeholder="例如：我下个月的工作状态如何？" />
+      </label>
+      <div class="control-row">
+        <label>
+          牌阵
+          <select id="spreadSelect">
+            <option value="single">单张指引</option>
+            <option value="ppf">过去 · 现在 · 未来</option>
+          </select>
+        </label>
+        <button id="drawBtn" type="button">开始抽牌</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-live="polite">
+      <h2>占卜结果</h2>
+      <div id="resultCards" class="cards"></div>
+      <p id="analysisText" class="analysis">点击“开始抽牌”开启一次占卜。</p>
+    </section>
+
+    <section class="panel" aria-label="历史记录">
+      <div class="history-head">
+        <h2>本地占卜历史</h2>
+        <button id="clearHistoryBtn" class="ghost" type="button">清空历史</button>
+      </div>
+      <ul id="historyList" class="history-list"></ul>
+    </section>
+  </main>
+  <script src="./script.js"></script>
+</body>
+</html>
