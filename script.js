@@ -32,8 +32,8 @@ const spreads = {
   ]
 };
 
-const reversedProbability = 0.5;
-const historyKey = "tarotDivinationHistory";
+const REVERSED_PROBABILITY = 0.5;
+const HISTORY_KEY = "tarotDivinationHistory";
 
 const questionInput = document.getElementById("questionInput");
 const spreadSelect = document.getElementById("spreadSelect");
@@ -101,7 +101,7 @@ function buildAnalysis(drawn) {
 
 function getHistory() {
   try {
-    const raw = localStorage.getItem(historyKey);
+    const raw = localStorage.getItem(HISTORY_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
@@ -111,7 +111,7 @@ function getHistory() {
 function saveHistory(entry) {
   const existing = getHistory();
   existing.unshift(entry);
-  localStorage.setItem(historyKey, JSON.stringify(existing.slice(0, 30)));
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(existing.slice(0, 30)));
 }
 
 function renderHistory() {
@@ -152,7 +152,7 @@ function drawCards() {
   const drawn = shuffle(tarotCards).slice(0, spread.length).map((card, index) => ({
     card,
     position: spread[index].label,
-    reversed: Math.random() < reversedProbability
+    reversed: Math.random() < REVERSED_PROBABILITY
   }));
 
   resultCards.textContent = "";
@@ -177,7 +177,7 @@ function drawCards() {
 
 drawBtn.addEventListener("click", drawCards);
 clearHistoryBtn.addEventListener("click", () => {
-  localStorage.removeItem(historyKey);
+  localStorage.removeItem(HISTORY_KEY);
   renderHistory();
 });
 
