@@ -32,7 +32,7 @@ const spreads = {
   ]
 };
 
-const REVERSED_PROBABILITY = 0.5;
+const CARD_REVERSED_PROBABILITY = 0.5;
 const HISTORY_KEY = "tarotDivinationHistory";
 
 const questionInput = document.getElementById("questionInput");
@@ -104,7 +104,8 @@ function getHistory() {
   try {
     const raw = localStorage.getItem(HISTORY_KEY);
     return raw ? JSON.parse(raw) : [];
-  } catch {
+  } catch (error) {
+    console.error("读取占卜历史失败：", error);
     return [];
   }
 }
@@ -153,7 +154,7 @@ function drawCards() {
   const drawn = shuffle(tarotCards).slice(0, spread.length).map((card, index) => ({
     card,
     position: spread[index].label,
-    reversed: Math.random() < REVERSED_PROBABILITY
+    reversed: Math.random() < CARD_REVERSED_PROBABILITY
   }));
 
   resultCards.textContent = "";
