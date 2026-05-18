@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Mystic Tarot | 自主抽牌</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="page-container">
+        <div class="tarot-card tarot-card-wide">
+            <div class="back-link">
+                <a href="../index.html">← 返回首页</a>
+            </div>
+            <h1 class="page-title">🔮 选 一 张 牌</h1>
+            <p class="subtitle" id="drawHint">凝神静气，从牌堆中选出你最有感应的那张牌</p>
+
+            <div class="draw-mode-tabs">
+                <button class="draw-mode-tab active" data-mode="single" id="modeSingle">
+                    🎴 单抽模式
+                </button>
+                <button class="draw-mode-tab" data-mode="multi" id="modeMulti">
+                    ✨ 多抽模式
+                </button>
+            </div>
+
+            <div class="multi-draw-config hidden" id="multiDrawConfig">
+                <label class="multi-draw-label">选择抽取张数：</label>
+                <div class="multi-draw-options" id="multiDrawOptions">
+                    <button class="multi-draw-opt" data-count="3">3张</button>
+                    <button class="multi-draw-opt active" data-count="5">5张</button>
+                    <button class="multi-draw-opt" data-count="7">7张</button>
+                    <button class="multi-draw-opt" data-count="10">10张</button>
+                </div>
+            </div>
+
+            <div class="deck-container" id="deckContainer">
+                <div class="deck" id="deck"></div>
+            </div>
+
+            <div class="deck-controls">
+                <button class="btn btn-secondary" id="reshuffleBtn">🔄 重新洗牌</button>
+                <select id="deckModeSelect" class="draw-mode-select">
+                    <option value="major">仅大阿卡纳（22张）</option>
+                    <option value="full">完整牌组（78张）</option>
+                </select>
+            </div>
+
+            <div class="progress-container hidden" id="progressContainer">
+                <div class="progress-info">
+                    <span class="progress-label" id="progressLabel">抽牌进度</span>
+                    <span class="progress-count" id="progressCount">0 / 5</span>
+                </div>
+                <div class="progress-bar-track">
+                    <div class="progress-bar-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-cards" id="progressCards"></div>
+            </div>
+
+            <div class="multi-reveal-area hidden" id="multiRevealArea">
+                <button class="btn btn-pink btn-reveal-all" id="revealAllBtn">
+                    ✨ 统一揭开所有牌 ✨
+                </button>
+                <p class="reveal-hint">所有卡牌已就位，点击按钮同步揭示</p>
+            </div>
+
+            <div class="drawn-card-display" id="drawnCardDisplay"></div>
+
+            <div class="multi-result-grid hidden" id="multiResultGrid"></div>
+
+            <div id="resultArea" class="result-area hidden"></div>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+</body>
+</html>

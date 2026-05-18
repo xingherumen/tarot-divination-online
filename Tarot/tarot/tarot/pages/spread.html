@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Mystic Tarot | 牌阵占卜</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="page-container">
+        <div class="tarot-card tarot-card-spread">
+            <div class="back-link">
+                <a href="../index.html">← 返回首页</a>
+            </div>
+            <h1 class="page-title">🔮 牌 阵 占 卜</h1>
+            <p class="subtitle">选择适合你问题的牌阵，获取深度解读</p>
+
+            <div class="spread-question-section" id="spreadStep1">
+                <label for="spreadQuestion" class="spread-label">你想问什么？（可选）</label>
+                <input type="text" id="spreadQuestion" class="spread-input"
+                    placeholder="例如：我该不该换工作？这段关系会怎样发展？" maxlength="100" />
+            </div>
+
+            <div class="spread-selector-section">
+                <h3 class="spread-section-title">选择牌阵</h3>
+                <div class="spread-selector" id="spreadSelector">
+                </div>
+            </div>
+
+            <div class="hidden" id="spreadStep2">
+                <div class="spread-info" id="spreadInfo"></div>
+                <div class="spread-actions">
+                    <button class="btn btn-pink" id="spreadDrawBtn" disabled>🎴 请先选择牌阵</button>
+                    <button class="btn btn-secondary" id="spreadResetBtn">🔄 重新选择</button>
+                </div>
+            </div>
+
+            <div class="spread-status hidden" id="spreadStatus"></div>
+
+            <div class="spread-draw-section hidden" id="spreadDrawSection">
+                <div class="spread-draw-header">
+                    <h3 class="spread-draw-title" id="spreadDrawTitle">🎴 请依次抽取卡牌</h3>
+                    <p class="subtitle spread-draw-subtitle" id="spreadDrawHint">从牌堆中选出你最有感应的牌</p>
+                    <div class="spread-draw-info">
+                        <span class="spread-draw-name" id="spreadDrawName"></span>
+                        <span class="spread-draw-count" id="spreadDrawCount"></span>
+                    </div>
+                </div>
+
+                <div class="deck-container" id="spreadDeckContainer">
+                    <div class="deck" id="spreadDeck"></div>
+                </div>
+
+                <div class="spread-deck-remain" id="spreadDeckRemain">
+                    <span class="remain-label">剩余牌组</span>
+                    <span class="remain-count" id="remainCount">78</span>
+                </div>
+
+                <div class="progress-container hidden" id="spreadProgressContainer">
+                    <div class="progress-info">
+                        <span class="progress-label">抽牌进度</span>
+                        <span class="progress-count" id="spreadProgressCount">0 / 0</span>
+                    </div>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="spreadProgressFill"></div>
+                    </div>
+                    <div class="progress-cards" id="spreadProgressCards"></div>
+                </div>
+
+                <div class="multi-reveal-area hidden" id="spreadRevealArea">
+                    <button class="btn btn-pink btn-reveal-all" id="spreadRevealBtn">
+                        ✨ 统一揭开所有牌 ✨
+                    </button>
+                    <p class="reveal-hint">所有卡牌已就位，点击按钮同步揭示</p>
+                </div>
+
+                <div class="multi-result-grid hidden" id="spreadMultiResultGrid"></div>
+
+                <div class="hidden" id="spreadDrawResultArea"></div>
+            </div>
+
+            <div class="drawing-error hidden" id="spreadDrawError"></div>
+
+            <div class="spread-layout-container hidden" id="spreadLayoutContainer"></div>
+
+            <div class="interpretation-container hidden" id="interpretationContainer"></div>
+
+            <div class="spread-save-section hidden">
+                <button class="btn btn-save" id="spreadSaveBtn">💾 保存记录</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-detail-overlay" id="cardDetailOverlay"></div>
+
+    <script src="../js/spreads/base.js"></script>
+    <script src="../js/spreads/three-card.js"></script>
+    <script src="../js/spreads/celtic-cross.js"></script>
+    <script src="../js/spreads/hexagram.js"></script>
+    <script src="../js/spreads/relationship.js"></script>
+    <script src="../js/spreads/two-choices.js"></script>
+    <script src="../js/spreads/zodiac.js"></script>
+    <script src="../js/spread-interpreter.js"></script>
+    <script src="../js/spread-engine.js"></script>
+    <script src="../script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (TarotSpreads && TarotSpreads.SpreadEngine) {
+                TarotSpreads.SpreadEngine.init();
+            }
+        });
+    </script>
+</body>
+</html>

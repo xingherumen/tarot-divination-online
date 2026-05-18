@@ -1,0 +1,40 @@
+/* ================================================================
+   三张牌阵（线性布局）— CSS Grid
+   过去 — 现在 — 未来
+   3列2行：中间牌（现在）在上行，两侧牌在下行
+   ================================================================ */
+
+/* === 桌面端 (>1024px) === */
+
+.result-layout-linear {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    max-width: 760px;
+}
+
+.result-layout-linear .result-card-slot:nth-child(1) { grid-column: 1; grid-row: 2; }
+.result-layout-linear .result-card-slot:nth-child(2) { grid-column: 2; grid-row: 1; }
+.result-layout-linear .result-card-slot:nth-child(3) { grid-column: 3; grid-row: 2; }
+
+.result-layout-linear .result-card-slot:nth-child(2) .result-card {
+    border-color: #ec4899;
+    box-shadow: 0 6px 24px rgba(236,72,153,0.25);
+}
+
+/* === 平板端 (601px - 1024px) === */
+
+@media (max-width: 1024px) {
+    .result-layout-linear {
+        gap: clamp(8px, 1.5vw, 16px);
+        padding: clamp(8px, 2vw, 20px);
+    }
+}
+
+/* === 手机端 (≤600px) === */
+
+@media (max-width: 600px) {
+    .result-layout-linear {
+        gap: 6px;
+        padding: 8px;
+    }
+}

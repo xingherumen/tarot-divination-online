@@ -1,0 +1,46 @@
+/* ================================================================
+   关系牌阵（5张 — 十字形布局）— CSS Grid
+   3列3行十字布局
+   
+        C1        C2         C3
+   R1:          [5.结果]
+   R2: [1.你]  [3.关系]  [2.对方]
+   R3:          [4.阻碍]
+   ================================================================ */
+
+/* === 桌面端 (>1024px) === */
+
+.result-spread-relationship {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    max-width: 800px;
+}
+
+.result-spread-relationship .result-card-slot:nth-child(5) { grid-column: 2; grid-row: 1; }
+.result-spread-relationship .result-card-slot:nth-child(1) { grid-column: 1; grid-row: 2; }
+.result-spread-relationship .result-card-slot:nth-child(3) { grid-column: 2; grid-row: 2; }
+.result-spread-relationship .result-card-slot:nth-child(2) { grid-column: 3; grid-row: 2; }
+.result-spread-relationship .result-card-slot:nth-child(4) { grid-column: 2; grid-row: 3; }
+
+.result-spread-relationship .result-card-center .result-card {
+    border-color: #ec4899;
+    box-shadow: 0 6px 24px rgba(236,72,153,0.3);
+}
+
+/* === 平板端 (601px - 1024px) === */
+
+@media (max-width: 1024px) {
+    .result-spread-relationship {
+        gap: clamp(8px, 1.5vw, 16px);
+        padding: clamp(8px, 2vw, 20px);
+    }
+}
+
+/* === 手机端 (≤600px) === */
+
+@media (max-width: 600px) {
+    .result-spread-relationship {
+        gap: 6px;
+        padding: 8px;
+    }
+}
